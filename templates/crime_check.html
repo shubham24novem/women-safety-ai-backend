@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crime Risk Detection</title>
+</head>
+<body>
+
+    <h2>Women Safety Crime Risk Check</h2>
+
+    <button onclick="checkSafety()">Check My Area Safety</button>
+
+    <h3 id="result"></h3>
+
+    <script>
+        function checkSafety() {
+            navigator.geolocation.getCurrentPosition(function(position) {
+
+                let latitude = position.coords.latitude;
+                let longitude = position.coords.longitude;
+                let hour = new Date().getHours();
+
+                let crime_count = 10;
+
+                fetch("http://127.0.0.1:5000/predict_crime", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        latitude: latitude,
+                        longitude: longitude,
+                        hour: hour,
+                        crime_count: crime_count
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.prediction === "unsafe") {
+                        document.getElementById("result").innerText =
+                            "⚠️ WARNING: Unsafe Area!";
+                    } else {
+                        document.getElementById("result").innerText =
+                            "✅ Safe Area";
+                    }
+                });
+
+            });
+        }
+    </script>
+
+</body>
+</html>

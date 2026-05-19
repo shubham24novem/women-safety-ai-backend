@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voice SOS</title>
+</head>
+<body>
+    <h2>Women Safety Voice Detection</h2>
+    <button onclick="startListening()">Start Voice Detection</button>
+    <p id="output"></p>
+
+    <script>
+        function startListening() {
+            const recognition =
+                new(window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+            recognition.lang = 'en-US';
+
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                let text = event.results[0][0].transcript;
+                document.getElementById("output").innerText = text;
+
+                fetch("http://127.0.0.1:5000/voice_detect", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ text: text })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.distress) {
+                        alert("EMERGENCY DETECTED!");
+                    } else {
+                        alert("Safe");
+                    }
+                });
+            };
+        }
+    </script>
+</body>
+</html>
