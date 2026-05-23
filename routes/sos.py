@@ -11,6 +11,13 @@ def sos_alert():
     phone = data.get('phone')
     location = data.get('location')
 
+    contacts = [
+        data.get('emergency_contact1'),
+        data.get('emergency_contact2'),
+        data.get('emergency_contact3'),
+        data.get('emergency_contact4'),
+    ]
+
     msg = f"""
 🚨 WOMEN SAFETY ALERT!
 
@@ -21,8 +28,10 @@ Live Location:
 {location}
 """
 
-    send_sos_sms("", msg)
+    for contact in contacts:
+        if contact:
+            send_sos_sms(contact, msg)
 
     return jsonify({
-        "message": "SOS alert sent with GPS"
+        "message": "SOS alerts sent successfully"
     })

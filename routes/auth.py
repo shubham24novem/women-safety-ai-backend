@@ -19,7 +19,11 @@ def register():
         full_name=data['full_name'],
         email=data['email'],
         password=data['password'],
-        phone=data['phone']
+        phone=data['phone'],
+        emergency_contact1=data['emergency_contact1'],
+        emergency_contact2=data['emergency_contact2'],
+        emergency_contact3=data['emergency_contact3'],
+        emergency_contact4=data['emergency_contact4']
     )
 
     db.session.add(user)
@@ -50,5 +54,33 @@ def login():
         "user_id": user.id,
         "name": user.full_name,
         "email": user.email,
-        "phone": user.phone
+        "phone": user.phone,
+        "emergency_contact1": user.emergency_contact1,
+        "emergency_contact2": user.emergency_contact2,
+        "emergency_contact3": user.emergency_contact3,
+        "emergency_contact4": user.emergency_contact4
+    })
+# UPDATE PROFILE
+@auth_bp.route('/update_profile', methods=['POST'])
+def update_profile():
+    data = request.json
+
+    user = User.query.get(data['user_id'])
+
+    if not user:
+        return jsonify({
+            "message": "User not found"
+        }), 404
+
+    user.full_name = data['full_name']
+    user.phone = data['phone']
+    user.emergency_contact1 = data['emergency_contact1']
+    user.emergency_contact2 = data['emergency_contact2']
+    user.emergency_contact3 = data['emergency_contact3']
+    user.emergency_contact4 = data['emergency_contact4']
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Profile updated successfully"
     })
