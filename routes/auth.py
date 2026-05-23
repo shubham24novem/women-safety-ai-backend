@@ -20,10 +20,10 @@ def register():
         email=data['email'],
         password=data['password'],
         phone=data['phone'],
-        emergency_contact1=data['emergency_contact1'],
-        emergency_contact2=data['emergency_contact2'],
-        emergency_contact3=data['emergency_contact3'],
-        emergency_contact4=data['emergency_contact4']
+        emergency_contact1="",
+        emergency_contact2="",
+        emergency_contact3="",
+        emergency_contact4=""
     )
 
     db.session.add(user)
