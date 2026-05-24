@@ -17,6 +17,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
+with app.app_context():
+    db.create_all()
+
 # Register routes AFTER app is created
 app.register_blueprint(auth_bp)
 app.register_blueprint(contacts_bp)
